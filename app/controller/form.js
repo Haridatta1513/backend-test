@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
       var save = user.save();
       if (save) {
         // return new user
-        return res.json(user);
+        return res.json({ message: "success" });
       }
     }
   } catch (err) {
