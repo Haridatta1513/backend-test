@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
     const mobile = req.body.mobile;
     const oldUser = await users.findOne({ mobile });
     if (oldUser) {
-      return res.status(409).json({ mes: "User Already Exist. Please Login" });
+      return res.status(400).json({ mes: "User Already Exist. Please Login" });
     } else {
       const user = new users({
         name: req.body.name,
@@ -63,6 +63,22 @@ exports.login = async (req, res) => {
           return res.status(401).json({ msg: "Invalid credencial" });
         }
       });
+  } catch (err) {
+    return res.status(400).json({ message: err });
+  }
+};
+
+exports.profile = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(400).json({ mes: "Id is required" });
+    }
+    const profile = await users.findOne({ _id: req.params.id });
+    if (profile) {
+      return res.status(200).json(profile);
+    } else {
+      return res.status(400).json({ message: "Internal Error" });
+    }
   } catch (err) {
     return res.status(400).json({ message: err });
   }

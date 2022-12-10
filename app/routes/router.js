@@ -7,5 +7,6 @@ const formcontroller = require("../controller/form");
 
 route.post("/register", formcontroller.register);
 route.post("/login", formcontroller.login);
+route.get("/profile/:id", formcontroller.profile);
 
 module.exports = route;
