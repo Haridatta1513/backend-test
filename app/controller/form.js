@@ -40,24 +40,29 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     // Get user input
-    const { mobile } = req.body;
+    const { mobile, password } = req.body;
     // Validate user input
     if (!mobile) {
       return res.status(400).json({ msg: "Mobile number is required" });
     }
+    if (!password) {
+      return res.status(400).json({ msg: "Password is required" });
+    }
     // Validate if user exist in our database
-    await users.findOne({ mobile: req.body.mobile }).then((user) => {
-      //if user not exist than return status 400
-      if (!user) {
-        return res.status(400).json({ msg: "User not exist" });
-      }
-      //if user exist than return user
-      if (user) {
-        return res.status(200).json(user);
-      } else {
-        return res.status(401).json({ msg: "Invalid credencial" });
-      }
-    });
+    await users
+      .findOne({ mobile: req.body.mobile, password: req.body.password })
+      .then((user) => {
+        //if user not exist than return status 400
+        if (!user) {
+          return res.status(400).json({ msg: "User not exist" });
+        }
+        //if user exist than return user
+        if (user) {
+          return res.status(200).json(user);
+        } else {
+          return res.status(401).json({ msg: "Invalid credencial" });
+        }
+      });
   } catch (err) {
     return res.status(400).json({ message: err });
   }
